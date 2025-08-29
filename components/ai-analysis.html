@@ -1,0 +1,57 @@
+<!-- ===================================
+     AI ANALYSIS COMPONENT
+     =================================== -->
+<div class="card" id="ai-analysis-card">
+  <h2 class="card-title">
+    <span class="icon">🤖</span>
+    Análise Do Email
+  </h2>
+
+  <!-- Loading State -->
+  <div class="loading" id="loading">
+    <div class="spinner"></div>
+    <p>Analisando email com IA...</p>
+  </div>
+
+
+  <!-- Empty State -->
+  <div class="empty" id="empty">
+    <p class="subtitle" style="font-size: medium;">Após processar o email, os resultados aparecerão aqui.</p>
+  </div>
+
+  <!-- Results Section -->
+  <div class="results-section" id="results">
+
+    <!-- Classification Result -->
+    <div class="result-card" id="classification-result">
+      <h3 class="result-title">Classificação</h3>
+      <span id="categoryBadge" class="category-badge"></span>
+      <p id="confidence" class="confidence-text"></p>
+    </div>
+
+    <!-- Suggested Response -->
+    <div class="result-card" id="response-result">
+      <h3 class="result-title">Resposta Sugerida</h3>
+      <div id="suggestedResponse" class="response-text"></div>
+      <button class="copy-btn" onclick="copyResponse()" aria-label="Copiar resposta">
+        📋 Copiar Resposta
+      </button>
+    </div>
+
+    <!-- Statistics -->
+    <div class="stats" id="analysis-stats">
+      <div class="stat-card">
+        <div class="stat-number" id="wordCount">0</div>
+        <div class="stat-label">Palavras</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="processingTime">0s</div>
+        <div class="stat-label">Tempo</div>
+      </div>
+      <div class="stat-card">
+        <div class="stat-number" id="accuracyScore">0%</div>
+        <div class="stat-label">Confiança</div>
+      </div>
+    </div>
+  </div>
+</div>

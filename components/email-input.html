@@ -1,0 +1,44 @@
+<!-- ===================================
+     EMAIL INPUT COMPONENT
+     =================================== -->
+<div class="card" id="email-input-card">
+  <h2 class="card-title">
+    <span class="icon">📧</span>
+    Insira o email abaixo:
+  </h2>
+
+  <!-- File Upload Area -->
+  <div class="upload-area" id="uploadArea">
+    <div class="upload-icon">📤</div>
+    <p class="upload-title">
+      Arraste seu arquivo aqui
+    </p>
+    <p class="upload-subtitle">
+      ou clique para selecionar (.txt, .pdf)
+    </p>
+    <input type="file" id="fileInput" accept=".txt,.pdf">
+  </div>
+
+  <!-- File Info Display -->
+  <div class="file-info" id="fileInfo">
+    <span id="fileName"></span>
+  </div>
+
+  <!-- Divider -->
+  <div class="input-divider">
+    <span class="divider-text">— ou —</span>
+  </div>
+
+  <!-- Text Input -->
+  <textarea id="emailText" placeholder="Cole o conteúdo do email aqui..." aria-label="Conteúdo do email"></textarea>
+
+  <!-- Action Buttons -->
+  <div class="btn-group">
+    <button id="processBtn" onclick="processEmail()" aria-label="Processar email">
+      🚀 Processar Email
+    </button>
+    <button class="btn-secondary" onclick="clearForm()" aria-label="Limpar formulário">
+      🔄 Limpar
+    </button>
+  </div>
+</div>
