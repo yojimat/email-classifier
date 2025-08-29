@@ -4,8 +4,8 @@
 
 :root {
   /* Primary Colors */
-  --primary-color: #6366f1;
-  --primary-dark: #4f46e5;
+  --primary-color: #c77d48;
+  --primary-dark: #191919;
 
   /* Status Colors */
   --success-color: #10b981;
@@ -13,16 +13,19 @@
   --danger-color: #ef4444;
 
   /* Background Colors */
-  --dark-bg: #0f172a;
-  --card-bg: #1e293b;
+  --dark-bg: #191919;
+  --card-bg: #DAE0E7;
 
   /* Text Colors */
-  --text-primary: #f1f5f9;
-  --text-secondary: #94a3b8;
+  --text-primary: #333333;
+  --text-secondary: #6C819D;
 
   /* Border Colors */
-  --border-color: #334155;
+  --border-color: #90A2B6;
 
   /* Gradients */
-  --gradient: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  --gradient: linear-gradient(135deg, #c77d48 0%, #D39B73 100%);
+
+  /* Shadows */
+  --shadow-color: rgba(125, 74, 38, 0.3);
 }
