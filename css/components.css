@@ -45,20 +45,22 @@
 
 /* Icons */
 .icon {
-  width: 28px;
-  height: 28px;
+  width: 32px;
+  height: 32px;
   display: inline-block;
-  background: var(--gradient);
   border-radius: 8px;
   position: relative;
 }
 
+.icon.button {
+  width: 24px;
+  height: 24px;
+}
+
 .upload-icon {
-  width: 64px;
-  height: 64px;
+  width: 40px;
+  height: 40px;
   margin: 0 auto 1rem;
-  background: var(--gradient);
-  border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
@@ -132,6 +134,9 @@ button {
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
 }
 
 button:hover {
