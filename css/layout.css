@@ -22,7 +22,6 @@
   padding: 2rem;
   position: relative;
   z-index: 2;
-  flex: 1;
 }
 
 header {
@@ -33,6 +32,7 @@ header {
 
 .main-content {
   display: grid;
+  width: 100%;
   grid-template-columns: 1fr 1fr;
   gap: 2rem;
   animation: fadeIn 0.8s ease;

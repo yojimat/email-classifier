@@ -4,7 +4,7 @@
 <div class="card" id="ai-analysis-card">
   <h2 class="card-title">
     <img alt="ai-icon" src="assets/ai.svg" class="icon" />
-    Análise Do Email
+    Análise do Email
   </h2>
 
   <!-- Loading State -->
@@ -15,12 +15,12 @@
 
 
   <!-- Empty State -->
-  <div class="empty" id="empty">
+  <div class="empty-result" id="emptyResult">
     <p class="subtitle" style="font-size: medium;">Após processar o email, os resultados aparecerão aqui.</p>
   </div>
 
   <!-- Results Section -->
-  <div class="results-section" id="results">
+  <div class="results-section" style="display: none;" id="results">
 
     <!-- Classification Result -->
     <div class="result-card" id="classification-result">
@@ -33,7 +33,7 @@
     <div class="result-card" id="response-result">
       <h3 class="result-title">Resposta Sugerida</h3>
       <div id="suggestedResponse" class="response-text"></div>
-      <button class="copy-btn" onclick="copyResponse()" aria-label="Copiar resposta">
+      <button class="copy-btn" id="copyResponseBtn" aria-label="Copiar resposta">
         📋 Copiar Resposta
       </button>
     </div>

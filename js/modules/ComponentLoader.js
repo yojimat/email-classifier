@@ -5,7 +5,7 @@
  * Handles dynamic loading of HTML components
  */
 
-class ComponentLoader {
+export default class ComponentLoader {
   constructor() {
     this.components = new Map();
     this.loadedComponents = new Set();

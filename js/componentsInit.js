@@ -1,3 +1,5 @@
+import ComponentLoader from "./modules/ComponentLoader.js";
+
 // Create global instance
 const componentLoader = new ComponentLoader();
 
@@ -27,9 +29,4 @@ async function initializeComponents() {
   }
 }
 
-// Auto-initialize when DOM is ready
-if (document.readyState === "loading") {
-  document.addEventListener("DOMContentLoaded", initializeComponents);
-} else {
-  initializeComponents();
-}
+export { initializeComponents };
