@@ -212,7 +212,7 @@ button:disabled {
 .file-info {
   margin-top: 1rem;
   padding: 0.75rem;
-  background: rgba(99, 102, 241, 0.1);
+  background: rgba(194, 203, 214, 0.5);
   border-radius: 0.5rem;
   color: var(--primary-color);
   display: none;

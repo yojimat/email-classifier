@@ -14,11 +14,9 @@ export class FileHandler {
     this.fileName = null;
     this.emailText = null;
 
-    // Supported file types
     this.supportedTypes = ["text/plain", "application/pdf"];
     this.supportedExtensions = [".txt", ".pdf"];
 
-    // Event handlers bound to this instance
     this.boundHandlers = {
       handleClick: this.handleClick.bind(this),
       handleDragOver: this.handleDragOver.bind(this),
@@ -29,7 +27,6 @@ export class FileHandler {
   }
 
   /**
-   * Initialize the file handler with DOM elements
    * @param {Object} elements - Object containing DOM element selectors
    */
   init(elements = {}) {
@@ -60,9 +57,6 @@ export class FileHandler {
     }
   }
 
-  /**
-   * Validate that all required DOM elements are present
-   */
   validateElements() {
     const requiredElements = {
       uploadArea: this.uploadArea,
@@ -77,9 +71,6 @@ export class FileHandler {
     }
   }
 
-  /**
-   * Attach event listeners to DOM elements
-   */
   attachEventListeners() {
     if (this.uploadArea) {
       this.uploadArea.addEventListener("click", this.boundHandlers.handleClick);
@@ -130,9 +121,6 @@ export class FileHandler {
     }
   }
 
-  /**
-   * Handle click on upload area
-   */
   handleClick() {
     if (this.fileInput) {
       this.fileInput.click();
@@ -140,7 +128,6 @@ export class FileHandler {
   }
 
   /**
-   * Handle drag over event
    * @param {DragEvent} event - Drag event
    */
   handleDragOver(event) {
@@ -148,15 +135,11 @@ export class FileHandler {
     this.uploadArea?.classList.add("active");
   }
 
-  /**
-   * Handle drag leave event
-   */
   handleDragLeave() {
     this.uploadArea?.classList.remove("active");
   }
 
   /**
-   * Handle file drop event
    * @param {DragEvent} event - Drop event
    */
   handleDrop(event) {
@@ -165,28 +148,25 @@ export class FileHandler {
 
     const files = event.dataTransfer?.files;
     if (files && files.length > 0) {
-      this.processFile(files[0]);
+      this.loadFile(files[0]);
     }
   }
 
   /**
-   * Handle file selection from input
    * @param {Event} event - Change event
    */
   handleFileSelect(event) {
     const files = event.target?.files;
     if (files && files.length > 0) {
-      this.processFile(files[0]);
+      this.loadFile(files[0]);
     }
   }
 
   /**
-   * Process the selected file
    * @param {File} file - File object to process
    */
-  async processFile(file) {
+  async loadFile(file) {
     try {
-      // Validate file type
       if (!this.isValidFileType(file)) {
         this.notificationService?.error(
           `Por favor, selecione um arquivo ${this.supportedExtensions.join(
@@ -196,27 +176,20 @@ export class FileHandler {
         return;
       }
 
-      // Update UI with file info
       this.updateFileInfo(file);
 
-      // Process file content if it's a text file
       if (file.type === "text/plain") {
         await this.readTextFile(file);
-      } else {
-        this.notificationService?.info(
-          "Arquivo PDF carregado. Processamento manual necessário."
-        );
       }
 
-      console.log(`📄 File processed: ${file.name}`);
+      console.log(`📄 File loaded: ${file.name}`);
     } catch (error) {
-      console.error("Error processing file:", error);
-      this.notificationService?.error("Erro ao processar o arquivo");
+      console.error("Error loading file:", error);
+      this.notificationService?.error("Não foi possível carregar o arquivo.");
     }
   }
 
   /**
-   * Validate file type
    * @param {File} file - File to validate
    * @returns {boolean} - Whether file type is supported
    */
@@ -225,7 +198,6 @@ export class FileHandler {
   }
 
   /**
-   * Update file info display
    * @param {File} file - File object
    */
   updateFileInfo(file) {
@@ -239,7 +211,6 @@ export class FileHandler {
   }
 
   /**
-   * Read text file content
    * @param {File} file - Text file to read
    * @returns {Promise<string>} - File content
    */
@@ -263,9 +234,6 @@ export class FileHandler {
     });
   }
 
-  /**
-   * Clear file selection and reset UI
-   */
   clearFile() {
     if (this.fileInput) {
       this.fileInput.value = "";
@@ -278,13 +246,5 @@ export class FileHandler {
     if (this.fileName) {
       this.fileName.textContent = "";
     }
-  }
-
-  /**
-   * Get current file input element
-   * @returns {HTMLInputElement|null} - File input element
-   */
-  getFileInput() {
-    return this.fileInput;
   }
 }
