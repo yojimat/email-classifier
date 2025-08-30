@@ -46,7 +46,6 @@ class EmailController:
             JSON response with classification results
         """
         try:
-            # Validate request
             if not request.is_json:
                 return jsonify({
                     'error': 'Content-Type deve ser application/json'

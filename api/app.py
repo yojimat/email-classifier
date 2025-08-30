@@ -36,11 +36,11 @@ def create_app() -> Flask:
         # Get controller instances from container
         email_controller = container.get_email_controller()
 
-        # Register routes with controllers
-        register_routes(email_controller)
-
         # Register centralized error handlers
         register_error_handlers(app)
+
+        # Register routes with controllers
+        register_routes(email_controller)
 
         logger.info(
             "Flask application created successfully with new architecture")
@@ -59,6 +59,7 @@ def register_routes(email_controller) -> None:
         email_controller: Controller for email-related endpoints
         health_controller: Controller for health check endpoints
     """
+
     # Email processing routes
     app.route('/api/classify', methods=['POST']
               )(email_controller.classify_email)
@@ -88,16 +89,13 @@ def initialize_application() -> None:
         raise
 
 
-if __name__ == '__main__':
+if __name__ == '__main__' or __name__ == 'app':
     """
     Main entry point for the application.
     Initializes the application and starts the Flask development server.
     """
     try:
-        # Initialize the application
         initialize_application()
-
-        # Start the Flask development server
         app.run(
             debug=AppConfig.DEBUG,
             host=AppConfig.HOST,
