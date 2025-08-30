@@ -1,0 +1,22 @@
+# Framework Web
+flask==2.3.3
+flask-cors==4.0.0
+
+# Processamento de Linguagem Natural
+nltk==3.8.1
+transformers==4.33.2
+torch==2.0.1
+
+# Processamento de PDF
+PyPDF2==3.0.1
+
+# OpenAI (opcional)
+openai==0.28.0
+
+# Utilitários
+python-dotenv==1.0.0
+numpy==1.24.3
+pandas==2.0.3
+
+# Servidor de produção
+gunicorn==21.2.0
