@@ -1,6 +1,5 @@
 """
 Feature extraction service implementation.
-Handles feature extraction from processed emails following the Single Responsibility Principle.
 """
 import re
 import logging
@@ -15,7 +14,6 @@ logger = logging.getLogger(__name__)
 class FeatureExtractionService(IFeatureExtractionService):
     """
     Service responsible for extracting features from processed emails.
-    Follows Single Responsibility Principle by focusing only on feature extraction.
     """
 
     def __init__(self, config_repository: IConfigRepository):
@@ -51,9 +49,6 @@ class FeatureExtractionService(IFeatureExtractionService):
             processed_email.processed_text,
             unproductive_keywords
         )
-
-        # Extract text-based features
-        text_features = self._extract_text_features(processed_email)
 
         # Extract pattern-based features
         pattern_features = self._extract_pattern_features(
@@ -93,23 +88,6 @@ class FeatureExtractionService(IFeatureExtractionService):
                 matches.append(keyword)
 
         return matches
-
-    def _extract_text_features(self, processed_email: ProcessedEmail) -> dict:
-        """
-        Extract text-based features.
-
-        Args:
-            processed_email: Processed email data
-
-        Returns:
-            Dictionary of text features
-        """
-        return {
-            'token_count': len(processed_email.tokens),
-            'filtered_token_count': len(processed_email.filtered_tokens),
-            'unique_tokens': len(set(processed_email.filtered_tokens)),
-            'text_complexity': self._calculate_text_complexity(processed_email)
-        }
 
     def _extract_pattern_features(self, original_text: str) -> dict:
         """

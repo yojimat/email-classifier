@@ -1,6 +1,6 @@
 """
 File processing service implementation.
-Handles file processing operations following the Single Responsibility Principle.
+Handles file processing operations 
 """
 import logging
 from core.interfaces.services import IFileProcessingService, IEmailProcessingService
@@ -14,7 +14,6 @@ logger = logging.getLogger(__name__)
 class FileProcessingService(IFileProcessingService):
     """
     Service responsible for processing files and extracting email content.
-    Follows Single Responsibility Principle by focusing only on file operations.
     """
 
     def __init__(

@@ -54,16 +54,6 @@ class IModelRepository(ABC):
         """Load and return classification model"""
         pass
 
-    @abstractmethod
-    def is_model_available(self, model_name: str) -> bool:
-        """Check if model is available"""
-        pass
-
-    @abstractmethod
-    def get_model_info(self, model_name: str) -> Dict[str, Any]:
-        """Get information about a model"""
-        pass
-
 
 class IFileRepository(ABC):
     """Interface for file processing operations"""

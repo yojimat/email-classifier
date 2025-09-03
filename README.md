@@ -50,7 +50,7 @@ cp .env.example .env
 ### 5. Download NLTK resources
 
 ```bash
-python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet')"
+python -c "import nltk; nltk.download('punkt'); nltk.download('stopwords'); nltk.download('wordnet');nltk.download('punkt_tab');"
 ```
 
 ## 🏃 Running the Project

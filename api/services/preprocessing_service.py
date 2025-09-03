@@ -1,10 +1,9 @@
 """
 Text preprocessing service implementation.
-Handles all text preprocessing operations following the Single Responsibility Principle.
 """
 import re
 import logging
-from typing import Dict, List
+from typing import List
 import nltk
 from nltk.corpus import stopwords
 from nltk.tokenize import word_tokenize
@@ -21,7 +20,6 @@ logger = logging.getLogger(__name__)
 class TextPreprocessingService(ITextPreprocessingService):
     """
     Service responsible for text preprocessing operations.
-    Follows Single Responsibility Principle by focusing only on text processing.
     """
 
     def __init__(self, config_repository: IConfigRepository):
@@ -51,6 +49,7 @@ class TextPreprocessingService(ITextPreprocessingService):
             nltk.download('stopwords', quiet=True)
             nltk.download('wordnet', quiet=True)
             nltk.download('averaged_perceptron_tagger', quiet=True)
+            nltk.download('punkt_tab', quiet=True)
             logger.info("NLTK resources initialized successfully")
         except Exception as e:
             logger.warning(f"Error downloading NLTK resources: {e}")

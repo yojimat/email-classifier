@@ -74,11 +74,6 @@ class IClassificationService(ABC):
         """
         pass
 
-    @abstractmethod
-    def is_classification_available(self) -> bool:
-        """Check if classification service is available"""
-        pass
-
 
 class IResponseGenerationService(ABC):
     """Interface for response generation operations"""

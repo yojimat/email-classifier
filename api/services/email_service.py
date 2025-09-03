@@ -1,6 +1,5 @@
 """
 Main email processing service implementation.
-Orchestrates the complete email processing pipeline following the Single Responsibility Principle.
 """
 import logging
 from datetime import datetime
@@ -17,7 +16,6 @@ logger = logging.getLogger(__name__)
 class EmailProcessingService(IEmailProcessingService):
     """
     Main service that orchestrates the complete email processing pipeline.
-    Follows Single Responsibility Principle by focusing on orchestration.
     """
 
     def __init__(
@@ -110,18 +108,3 @@ class EmailProcessingService(IEmailProcessingService):
                 f"Email processing failed after {processing_time:.2f}s: {e}")
             raise EmailClassificationError(
                 f"Email processing failed: {str(e)}")
-
-    def get_processing_status(self) -> dict:
-        """
-        Get status of all processing services.
-
-        Returns:
-            Dictionary with service status information
-        """
-        return {
-            'preprocessing_available': True,  # Always available
-            'feature_extraction_available': True,  # Always available
-            'classification_available': self._classification_service.is_classification_available(),
-            'response_generation_available': True,  # Always available
-            'pipeline_ready': self._classification_service.is_classification_available()
-        }

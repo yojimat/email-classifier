@@ -22,13 +22,10 @@ export class EmailProcessor {
 
       const startTime = Date.now();
 
-      // const result = await this.callClassificationAPI(content);
-      // result.processingTime = this.calculateProcessingTime(startTime);
+      const result = await this.callClassificationAPI(content);
+      result.processingTime = this.calculateProcessingTime(startTime);
 
-      const mockResult = this.generateMockData(content);
-      mockResult.processingTime = this.calculateProcessingTime(startTime);
-
-      return mockResult;
+      return result;
     } catch (error) {
       console.error("Error processing email:", error);
       throw error;

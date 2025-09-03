@@ -1,10 +1,9 @@
 """
 External AI service implementation.
-Handles integration with external AI services like OpenAI following the Single Responsibility Principle.
+Handles integration with external AI services like OpenAI 
 """
 import logging
-from typing import Optional
-import openai
+from openai import OpenAI
 from core.interfaces.services import IExternalAIService
 from core.interfaces.repositories import IExternalServiceRepository
 from core.domain.models import EmailCategory
@@ -16,7 +15,6 @@ logger = logging.getLogger(__name__)
 class ExternalAIService(IExternalAIService):
     """
     Service responsible for external AI integrations.
-    Follows Single Responsibility Principle by focusing only on external AI operations.
     """
 
     def __init__(self, external_service_repository: IExternalServiceRepository):
@@ -28,6 +26,7 @@ class ExternalAIService(IExternalAIService):
         """
         self._external_repo = external_service_repository
         self._is_configured = False
+        self._client = OpenAI()
         self._initialize_openai()
 
     def _initialize_openai(self) -> None:
@@ -35,7 +34,7 @@ class ExternalAIService(IExternalAIService):
         try:
             api_key = self._external_repo.get_openai_api_key()
             if api_key:
-                openai.api_key = api_key
+                self._client.api_key = api_key
                 self._is_configured = True
                 logger.info("OpenAI service initialized successfully")
             else:
@@ -66,18 +65,19 @@ class ExternalAIService(IExternalAIService):
         try:
             prompt = self._create_prompt(text, category)
 
-            response = openai.ChatCompletion.create(
+            response = self._client.responses.create(
                 model=self._external_repo.get_openai_model_name(),
-                messages=[
-                    {"role": "system",
+                input=[
+                    {"role": "developer",
                         "content": "Você é um assistente profissional de emails."},
                     {"role": "user", "content": prompt}
                 ],
-                max_tokens=self._external_repo.get_openai_max_tokens(),
+                # max_tokens=self._external_repo.get_openai_max_tokens(),
                 temperature=self._external_repo.get_openai_temperature()
             )
 
-            generated_response = response.choices[0].message.content.strip()
+            generated_response = response.output_text.strip()
+            # generated_response = response.choices[0].message.content.strip()
 
             if not generated_response:
                 raise ResponseGenerationError("Empty response from AI service")
@@ -136,30 +136,3 @@ class ExternalAIService(IExternalAIService):
             """
 
         return prompt
-
-    def test_connection(self) -> bool:
-        """
-        Test connection to external AI service.
-
-        Returns:
-            True if connection is successful
-        """
-        if not self.is_available():
-            return False
-
-        try:
-            # Simple test request
-            response = openai.ChatCompletion.create(
-                model=self._external_repo.get_openai_model_name(),
-                messages=[
-                    {"role": "user", "content": "Test"}
-                ],
-                max_tokens=10,
-                temperature=0.1
-            )
-
-            return bool(response.choices[0].message.content)
-
-        except Exception as e:
-            logger.error(f"AI service connection test failed: {e}")
-            return False

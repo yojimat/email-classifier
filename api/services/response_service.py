@@ -1,6 +1,5 @@
 """
 Response generation service implementation.
-Handles response generation operations following the Single Responsibility Principle.
 """
 import logging
 from typing import List, Optional
@@ -14,7 +13,6 @@ logger = logging.getLogger(__name__)
 class ResponseGenerationService(IResponseGenerationService):
     """
     Service responsible for generating email responses.
-    Follows Single Responsibility Principle by focusing only on response generation.
     """
 
     def __init__(self, external_ai_service: Optional[IExternalAIService] = None):

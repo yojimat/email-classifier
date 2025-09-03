@@ -1,10 +1,10 @@
 """
 Model repository implementation.
-Manages ML model loading and caching following the Repository pattern.
+Manages ML model loading and caching 
 """
 import os
 import logging
-from typing import Dict, Any, Optional
+from typing import Dict, Any
 from transformers import pipeline
 from core.interfaces.repositories import IModelRepository
 from core.domain.exceptions import ModelNotAvailableError
@@ -48,10 +48,9 @@ class ModelRepository(IModelRepository):
             logger.info(f"Loading model: {model_name}")
 
             model = pipeline(
-                "sentiment-analysis",
+                task="sentiment-analysis",
                 model=model_name,
-                device=AppConfig.get_model_device(),
-                cache_dir=AppConfig.MODEL_CACHE_DIR
+                device=AppConfig.get_model_device()
             )
 
             # Cache the model
@@ -70,59 +69,3 @@ class ModelRepository(IModelRepository):
             logger.error(f"Failed to load model {model_name}: {e}")
             raise ModelNotAvailableError(
                 f"Cannot load model {model_name}: {str(e)}")
-
-    def is_model_available(self, model_name: str) -> bool:
-        """
-        Check if model is available.
-
-        Args:
-            model_name: Name of the model to check
-
-        Returns:
-            True if model is available, False otherwise
-        """
-        if model_name in self._models:
-            return True
-
-        try:
-            # Try to load the model to check availability
-            self.load_classification_model(model_name)
-            return True
-        except ModelNotAvailableError:
-            return False
-
-    def get_model_info(self, model_name: str) -> Dict[str, Any]:
-        """
-        Get information about a model.
-
-        Args:
-            model_name: Name of the model
-
-        Returns:
-            Dictionary with model information
-        """
-        if model_name in self._model_info:
-            return self._model_info[model_name].copy()
-
-        return {
-            'name': model_name,
-            'loaded': False,
-            'available': self.is_model_available(model_name)
-        }
-
-    def unload_model(self, model_name: str) -> None:
-        """
-        Unload a model from memory.
-
-        Args:
-            model_name: Name of the model to unload
-        """
-        if model_name in self._models:
-            del self._models[model_name]
-            if model_name in self._model_info:
-                self._model_info[model_name]['loaded'] = False
-            logger.info(f"Model unloaded: {model_name}")
-
-    def get_loaded_models(self) -> Dict[str, Dict[str, Any]]:
-        """Get information about all loaded models"""
-        return {name: info.copy() for name, info in self._model_info.items() if info.get('loaded', False)}

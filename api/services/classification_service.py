@@ -66,10 +66,6 @@ class ClassificationService(IClassificationService):
             raise ClassificationFailedError(
                 f"Failed to classify email: {str(e)}")
 
-    def is_classification_available(self) -> bool:
-        """Check if classification service is available"""
-        return True  # Rule-based classification is always available
-
     def _is_suitable_for_ml_classification(self, processed_email: ProcessedEmail) -> bool:
         """
         Check if email is suitable for ML classification.
@@ -97,6 +93,9 @@ class ClassificationService(IClassificationService):
         try:
             # Limit text length for model input (most models have token limits)
             text_input = processed_email.processed_text[:512]
+
+            if self._classifier is None:
+                raise ModelNotAvailableError("Classifier model is not loaded")
 
             # Get ML prediction
             ml_result = self._classifier(text_input)
