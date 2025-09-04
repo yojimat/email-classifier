@@ -89,13 +89,15 @@ def initialize_application() -> None:
         raise
 
 
-if __name__ == '__main__' or __name__ == 'app':
+initialize_application()
+
+
+if __name__ == '__main__':
     """
     Main entry point for the application.
     Initializes the application and starts the Flask development server.
     """
     try:
-        initialize_application()
         app.run(
             debug=AppConfig.DEBUG,
             host=AppConfig.HOST,
