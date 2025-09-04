@@ -180,6 +180,8 @@ export class FileHandler {
 
       if (file.type === "text/plain") {
         await this.readTextFile(file);
+      } else {
+        this.emailText.value = "";
       }
 
       console.log(`📄 File loaded: ${file.name}`);
@@ -221,6 +223,7 @@ export class FileHandler {
       reader.onload = (event) => {
         const content = event.target?.result;
         if (this.emailText && content) {
+          this.clearFile();
           this.emailText.value = content;
         }
         resolve(content);
@@ -230,7 +233,7 @@ export class FileHandler {
         reject(new Error("Erro ao ler o arquivo"));
       };
 
-      reader.readAsText(file);
+      reader.readAsText(file, "UTF-8");
     });
   }
 
@@ -246,5 +249,9 @@ export class FileHandler {
     if (this.fileName) {
       this.fileName.textContent = "";
     }
+  }
+
+  getFile() {
+    return this.fileInput?.files?.[0] || null;
   }
 }

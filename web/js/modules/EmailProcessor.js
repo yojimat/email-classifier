@@ -9,6 +9,7 @@ export class EmailProcessor {
   constructor(notificationService) {
     this.notificationService = notificationService;
     this.apiEndpoint = "http://localhost:5000/api/classify";
+    this.apiEndpointFile = "http://localhost:5000/api/classify-file";
     this.requestTimeout = 30000; // 30 seconds
   }
 
@@ -21,13 +22,26 @@ export class EmailProcessor {
       this.validateEmailContent(content);
 
       const startTime = Date.now();
-
       const result = await this.callClassificationAPI(content);
       result.processingTime = this.calculateProcessingTime(startTime);
 
       return result;
     } catch (error) {
       console.error("Error processing email:", error);
+      throw error;
+    }
+  }
+
+  async processEmailFile(file) {
+    try {
+      const startTime = Date.now();
+
+      const result = await this.callClassificationFileAPI(file);
+      result.processingTime = this.calculateProcessingTime(startTime);
+
+      return result;
+    } catch (error) {
+      console.error("Error processing email file:", error);
       throw error;
     }
   }
@@ -84,8 +98,45 @@ export class EmailProcessor {
         },
         body: JSON.stringify({
           email_content: content.trim(),
-          timestamp: new Date().toISOString(),
         }),
+        signal: controller.signal,
+      });
+
+      clearTimeout(timeoutId);
+
+      if (!response.ok) {
+        throw new Error(
+          `Erro do servidor: ${response.status} ${response.statusText}`
+        );
+      }
+
+      const data = await response.json();
+      return this.validateAPIResponse(data);
+    } catch (error) {
+      clearTimeout(timeoutId);
+
+      this.notificationService?.error(
+        "Não foi possível processar o email, tente novamente."
+      );
+
+      if (error.name === "AbortError") {
+        throw new Error("Timeout na requisição para o servidor");
+      }
+
+      throw error;
+    }
+  }
+
+  async callClassificationFileAPI(file) {
+    const controller = new AbortController();
+    const timeoutId = setTimeout(() => controller.abort(), this.requestTimeout);
+    const form = new FormData();
+    form.append("file", file);
+
+    try {
+      const response = await fetch(this.apiEndpointFile, {
+        method: "POST",
+        body: form,
         signal: controller.signal,
       });
 
@@ -149,27 +200,6 @@ export class EmailProcessor {
   }
 
   /**
-   * Generate mock data for demonstration purposes
-   * @param {string} content - Email content
-   * @returns {Object} - Mock classification data
-   */
-  generateMockData(content) {
-    const wordCount = this.countWords(content);
-    const isProductive = this.determineMockProductivity(content, wordCount);
-
-    return {
-      category: isProductive ? "productive" : "unproductive",
-      confidence: this.generateMockConfidence(),
-      response: this.generateMockResponse(content, isProductive),
-      word_count: wordCount,
-      metadata: {
-        source: "mock",
-        analysis_date: new Date().toISOString(),
-      },
-    };
-  }
-
-  /**
    * Count words in content
    * @param {string} content - Text content
    * @returns {number} - Word count
@@ -182,80 +212,11 @@ export class EmailProcessor {
   }
 
   /**
-   * Determine mock productivity based on content analysis
-   * @param {string} content - Email content
-   * @param {number} wordCount - Word count
-   * @returns {boolean} - Whether email is considered productive
-   */
-  determineMockProductivity(content, wordCount) {
-    const productiveKeywords = [
-      "projeto",
-      "reunião",
-      "prazo",
-      "entrega",
-      "desenvolvimento",
-      "análise",
-      "proposta",
-      "orçamento",
-      "contrato",
-      "acordo",
-    ];
-
-    const unproductiveKeywords = [
-      "spam",
-      "promoção",
-      "desconto",
-      "oferta",
-      "grátis",
-      "clique aqui",
-      "urgente",
-      "limitado",
-    ];
-
-    const lowerContent = content.toLowerCase();
-
-    const productiveScore = productiveKeywords.reduce((score, keyword) => {
-      return score + (lowerContent.includes(keyword) ? 1 : 0);
-    }, 0);
-
-    const unproductiveScore = unproductiveKeywords.reduce((score, keyword) => {
-      return score + (lowerContent.includes(keyword) ? 1 : 0);
-    }, 0);
-
-    // Consider length and keyword analysis
-    const lengthFactor = wordCount > 50 ? 1 : 0;
-
-    return productiveScore + lengthFactor > unproductiveScore;
-  }
-
-  /**
    * Generate mock confidence score
    * @returns {number} - Confidence percentage
    */
   generateMockConfidence() {
     return Math.floor(Math.random() * 20) + 80; // 80-99%
-  }
-
-  /**
-   * Generate mock response based on content analysis
-   * @param {string} content - Email content
-   * @param {boolean} isProductive - Whether email is productive
-   * @returns {string} - Generated response
-   */
-  generateMockResponse(content, isProductive) {
-    if (isProductive) {
-      return `Prezado(a),<br><br>
-              Agradeço pelo seu email. Analisei atentamente os pontos apresentados e 
-              gostaria de contribuir com algumas considerações.<br><br>
-              [Pontos específicos baseados no conteúdo]<br><br>
-              Fico à disposição para discutirmos este assunto em maior detalhe.<br><br>
-              Atenciosamente`;
-    } else {
-      return `Olá,<br><br>
-              Obrigado pelo contato. Recebi sua mensagem e entrarei em contato 
-              assim que possível para darmos continuidade.<br><br>
-              Atenciosamente`;
-    }
   }
 
   /**
@@ -272,6 +233,15 @@ export class EmailProcessor {
   setAPIEndpoint(endpoint) {
     if (typeof endpoint === "string" && endpoint.trim()) {
       this.apiEndpoint = endpoint.trim();
+    }
+  }
+
+  /**
+   * @param {string} endpoint - New API endpoint URL
+   */
+  setAPIEndpointFile(endpoint) {
+    if (typeof endpoint === "string" && endpoint.trim()) {
+      this.apiEndpointFile = endpoint.trim();
     }
   }
 

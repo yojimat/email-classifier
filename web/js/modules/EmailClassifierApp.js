@@ -57,6 +57,10 @@ export class EmailClassifierApp {
       this.emailProcessor.setAPIEndpoint(config.apiEndpoint);
     }
 
+    if (config.apiEndpointFile) {
+      this.emailProcessor.setAPIEndpointFile(config.apiEndpointFile);
+    }
+
     if (config.requestTimeout) {
       this.emailProcessor.setTimeout(config.requestTimeout);
     }
@@ -104,9 +108,10 @@ export class EmailClassifierApp {
     }
 
     try {
+      const file = this.fileHandler.getFile();
       const content = this.uiManager.getEmailContent();
 
-      if (!content) {
+      if (!content && !file) {
         this.notificationService.warning(
           "Por favor, insira o conteúdo do email"
         );
@@ -117,7 +122,12 @@ export class EmailClassifierApp {
 
       console.log("📧 Processing email...");
 
-      const results = await this.emailProcessor.processEmail(content);
+      let results;
+      if (file) {
+        results = await this.emailProcessor.processEmailFile(file);
+      } else {
+        results = await this.emailProcessor.processEmail(content);
+      }
 
       this.uiManager.displayResults(results);
 

@@ -4,7 +4,8 @@
 export const APP_CONFIG = {
   // API Configuration
   apiEndpoint: "http://localhost:5000/api/classify",
-  requestTimeout: 30000, // 30 seconds
+  apiEndpointFile: "http://localhost:5000/api/classify-file",
+  requestTimeout: 60000, // 60 seconds
 
   // UI Element Selectors
   uiElements: {
